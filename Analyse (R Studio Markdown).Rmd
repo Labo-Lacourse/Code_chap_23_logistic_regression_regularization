@@ -1,0 +1,495 @@
+#Code des analyses présentées dans la partie 2 du chapitre 23
+##Écrit par Éric Lacourse, Véronique Dupéré et Charles-Édouard Giguère
+####Analyste: Charles-Édouard Giguère
+####Transcription du code: Clémentine Courdi
+
+2.1. Description de l’échantillon, du devis et des variables
+2.1.1. Échantillon
+Les données ont été recueillies initialement auprès de n = 6773 d’adolescents provenant de 12 écoles où le taux de décrochage est particulièrement élevé, autour de 36%, afin de mesurer un ensemble de facteurs de risque du décrochage scolaire. Au total, 10 des 12 écoles étaient situées dans des quartiers défavorisés. Un sous-échantillon a par la suite été invité à une entrevue afin d’établir les stresseurs auxquels les adolescents étaient exposés. L’objectif était d’interviewer 45 adolescents par école (pour un total de n = 545), suivant un devis avec cas témoins appariés. D’abord, 15 élèves qui venaient de décrocher de l’école ont été interviewés. Ensuite, 15 élèves appariés ayant un profil initial de risques similaires mais qui persévéraient ont également été interviewés. Finalement, 15 autres élèves « normatifs », également persévérants, qui avaient un niveau moyen de risque ont été interviewés.
+
+2.1.2. Variables
+La variable dépendante est une variable dichotomique (codée 0 = non/1 = oui) représentant le fait qu’un élève a décroché de l’école ou non. Un élève est considéré comme décrocheur s’il remplit au moins une des trois conditions suivantes : 1) avoir avisé officiellement de la cessation de ses études avant d’obtenir son diplôme d’études secondaires ou DES, 2) avoir été transféré au système d’éducation aux adultes, 3) être absent pendant plus d’un mois de l’école sans avoir avisé la direction des motivations sous-jacentes. Pour plus de détails sur les variables et le devis, voir l’article original de Dupéré et al. (2018)Une particularité de la structure des données est que la grande proportion des variables sont ordinales et recodées en variables factices (dummy) dichotomiques. En général, les effets de la régulation sont plus marqués : 1) avec des variables intervalles/ratio puisqu’elles ont une plus grande variance et 2) en présence de multicollinéarité. Une autre caractéristique des données est que nous ne sommes pas en contexte de haute dimensionnalité puisque nous avons 25 variables pour 1000 participants, donc p << n.  En dernier lieu, l’étude originale est de nature confirmatoire (hypothético-déductive) et non exploratoire (inductive), ce qui favorisera les algorithmes les moins flexibles, comme la régression logistique « classique ».  
+
+Description des variables indépendantes introduites dans le modèle de régression logistique régularisée provenant de l’étude de Dupéré et al. (2018)
+
+Nom des variables -	Types de variables - Nom des variables dans le fichier de données
+
+1.	Sexe	- Dichotomique -	MALE
+2.	Âge	-	Intervalle -	AGE
+3.	Parent immigré	-	Dichotomique	-	PAR_IMM
+4.	Ethnicité	-	Dichotomique	-	MINORITY
+5.	Niveau de scolarité parents	-	Intervalle	-	SCOLMAX
+6.	Mère en emploi	-	Dichotomique	-	TRAVAILM
+7.	Père en emploi	-	Dichotomique	-	TRAVAILP
+8.	Parents séparés	-	Dichotomique	-	PAR_SEP
+9.	Adaptation scolaire	-	Intervalle	-	ADAPT
+10.	Risque décrochage scolaire	-	Intervalle	-	SRDQ
+11.	Difficultés chroniques sévères	-	Intervalle	-	CHRONSEVACT
+12.	Stresseurs sévères 0-3 mois	-	Dichotomique	-	SEVER03DICO
+13.	Stresseurs sévères 3-6 mois	-	Dichotomique	-	SEVER36DICO
+14.	Stresseurs sévères 6-9 mois	-	Dichotomique	-	SEVER69DICO
+15.	Stresseurs sévères 9-12 mois	-	Dichotomique	-	SEVER912DICO
+16.	Stresseurs modérés 0-3 mois	-	Dichotomique	-	MODER203DICO
+17.	Stresseurs modérés 3-6 mois	-	Dichotomique	-	MODER236DICO
+18.	Stresseurs modérés 6-9 mois	-	Dichotomique	-	MODER269DICO
+19.	Stresseurs modérés 9-12 mois	-	Dichotomique	-	MODER2912DICO
+20.	Stresseurs faibles 0-3 mois	-	Dichotomique	-	LOW203DICO
+21.	Stresseurs faibles 3-6 mois	-	Dichotomique	-	LOW236DICO
+22.	Stresseurs faibles 6-9 mois	-	Dichotomique	-	LOW269DICO
+23.	Stresseurs faibles 9-12 mois	-	Dichotomique	-	LOW2912DICO
+24.	Stresseurs distaux sévères	-	Intervalle/ratio	-	EVDISTSEV
+25.	Stresseurs distaux modérés	-	Intervalle/ratio	-	EVDISTMOD
+
+2.2. Objectifs de l’analyse 
+
+L’objectif principal de cette analyse est de sélectionner un modèle de régression logistique, de manière exploratoire/inductive, en utilisant des techniques qui sont particulières à l’apprentissage automatique afin de potentiellement prédire le décrochage scolaire avec la plus grande justesse prédictive possible à partir des 25 variables indépendantes. Nous utilisons des données simulées à partir de l’échantillon initial.En résumé, la tâche de classification consiste à trouver à la fois le nombre optimal de prédicteurs du décrochagescolaire et l’algorithme de régularisation qui permettra le meilleur ajustement du modèle aux données, compte tenu de la spécificité des variables introduites dans le modèle.
+
+2.3. et 2.4 Régression logistique régularisée : procédures et modèles + interprétations et taleaux de résultats
+La suite du document montre le code utilisé (originalement dans le logiciel RStudio) pour la sélection du modèle conformément aux procédures décrites dans la partie 2.3 et aux résultats montrés dans la partie 2.4 du chapitre
+
+```{r}
+#Téléchargement des packages nécessaire à l'analyse
+
+install.packages("CUFF") #Package CUFF (Charles's Utility Function using Formula) pour affichage des variables
+install.packages ("dplyr") #Package dplyr pour manipulation flexible des données
+install.packages("ggplot2") #Package ggplot2 pour création de graphiques 
+install.packages("haven") #Package haven pour importer des données d'autres formats dans R
+install.packages("knitr") #Package knitr pour production de tableau
+install.packages("xtable") #Package xtable pour production de tableau
+install.packages("pairwise") #Package xtable pour production de tableau
+
+
+require(dplyr, quietly = TRUE, warn.conflicts = FALSE) 
+require(ggplot2, quietly = TRUE, warn.conflicts = FALSE) 
+require(CUFF, quietly = TRUE, warn.conflicts = FALSE) 
+require(haven, quietly = TRUE, warn.conflicts = FALSE)
+require(knitr, quietly = TRUE, warn.conflicts = FALSE)
+require(xtable, quietly = TRUE, warn.conflicts = FALSE)
+require(pairwise, quietly = TRUE, warn.conflicts = FALSE) 
+
+opts_chunk$set(echo = TRUE, prompt = TRUE, comment = "", cache = TRUE)
+options(xtable.comment = FALSE)
+
+install.packages("glmnet", quietly = TRUE, warn.conflicts = FALSE, dependencies = TRUE)
+install.packages("latex2exp", quietly = TRUE, warn.conflicts = FALSE, dependencies = TRUE)
+
+require(glmnet)
+require(latex2exp)
+```
+
+
+```{r}
+#Télécharger le fichier de données à partir de github
+SD.csv <- "https://github.com/clemcou-socio/Code-chapitre-23/SD.csv"
+
+#Lire le fichier de données téléchargé depuis github (vérification du téléchargement des données et des packages)
+library(readr)
+SD.df <- read.csv("SD.csv")
+ls(SD.df)
+```
+
+Développement des modèles à partir de l'échantillon d'entrainement
+On doit idéalement éviter le sur- ou le sous-apprentissage, c’est-à-dire d’avoir une excellente classification au sein de l’échantillon d’entraînement, mais une mauvaise classification avec de nouvelles données . Une solution pour éviter ce problème est de diviser aléatoirement l’échantillon en deux parties, 70% de données d’entraînement et 30% de données « test » (soit des nouvelles données). Cette proportion est un peu arbitraire, mais l’idée est de garder un échantillon d’entraînement le plus grand possible pour pouvoir développer un modèle tout en ayant un échantillon « test » assez grand pour valider le modèle. 
+Ainsi, l’échantillon est séparé en deux sous-échantillons:
+1. Fichier d’entraînement (TRAIN.df ; N = 700) 
+2. Fichier de test (TEST.df ; N = 300)
+
+```{r}
+#Diviser l'ensemble de données pour créer une sous-ensemble de données d'entrainement et un sous-ensemble de données de test 
+#(avec germe aléatoire pour assurer la reproductibilité des résultats)
+set.seed(1234)
+ECH.TRAIN <- sample(1:1000, 700)
+TRAIN.df <- SD.df[ECH.TRAIN,]
+TEST.df <- SD.df[-ECH.TRAIN,]
+```
+
+
+```{r}
+#Standardisation des variables
+TRAIN.df[,-(1:3)]  <- scale(TRAIN.df[,-(1:3)])
+TEST.df[,-(1:3)]  <- scale(TEST.df[,-(1:3)])
+
+TRAIN.df <- as.data.frame(TRAIN.df)
+TEST.df <- as.data.frame(TEST.df)
+```
+
+
+```{r}
+#Lire l'ensemble de données d'entrainement pour vérifier la réussite de l'étape précédente
+ls (TRAIN.df)
+
+#Lire l'ensemble de données de test pour vérifier la réussite de l'étape précédente
+ls (TEST.df)
+```
+
+Par la suite, l’échantillon d’entraînement est aussi divisé aléatoirement en dix sous-échantillons de 70 unités pour permettre la validation croisée à k plis ainsi que la sélection du paramètre alpha ou lambda afin de permettre une régularisation adéquate. Les partitions et la fonction crossval sont construites afin de préparer la validation croisée.
+
+```{r}
+#Division des données d'entrainement en 10 groupes de 70 individus (observations)
+PARTITION = sample(rep(1:10, rep(70,10)),700)
+
+#Création de la fonction crossval pour la validation croisée à 10-plis 
+crossval <- function(mod){
+  f1 <- function(x){
+    modi = update(mod, data = TRAIN.df[!(PARTITION %in% x),])
+    table(1*(predict(modi, newdata = TRAIN.df[PARTITION %in% x,],
+                     type = "resp")>0.5),
+          TRAIN.df[(PARTITION %in% x),"STATUT"])
+  }
+  CVT <- mapply(f1, x = 1:10)
+  as.table(matrix(apply(CVT, 1, sum), 2, 2,
+                  dimnames = list(c("P.ND","P.D"),
+                                  c("T.ND","T.D"))))
+}   
+```
+Une manière adéquate de commencer les analyses est d’estimer un modèle de régression logistique « classique » en utilisant les 25 prédicteurs. En premier lieu, les données de notre échantillon seront donc modélisées à partir d’une régression logistique « classique ». Les 25 variables standardisées, potentiellement associées au décrochage, sont introduites dans le modèle.
+
+```{r}
+#Un modèle additif (sans régularisation) de régression logistique est ajusté sur l’échantillon d’entraînement.
+#Régression logistique classique; données d’entraînement
+var.model <- c("MALE", "AGE", "PAR_IMM", "MINORITY", "SCOLMAX", "TRAVAILM", "TRAVAILP", "PAR_SEP", "ADAPT",
+               "SRDQ", "EVDISTSEV", "EVDISTMOD","SEVER03DICO",
+               "SEVER36DICO", "SEVER69DICO", "SEVER912DICO",
+               "MODER203DICO", "MODER236DICO", "MODER269DICO",
+               "MODER2912DICO", "LOW203DICO", "LOW236DICO",
+               "LOW269DICO", "LOW2912DICO", "CHRONSEVACT")
+glm1 <- glmnet(x = TRAIN.df[, var.model] %>% as.matrix, y = TRAIN.df[,"STATUT"], lambda=0, family = "binomial")
+```
+
+
+```{r}
+#Visualisation des résultats 
+print(glm1)
+predict(glm1, type="coef", "lambda.min", allCoef = TRUE)
+```
+
+```{r}
+#Prédiction à l'aide de la régression logistique classique
+glm1p <- predict(glm1, newx = TRAIN.df[,var.model] %>%
+                   as.matrix, s = "lambda.min")
+```
+
+```{r}
+#Table de classification montrant la performance prédictive du modèle (fréquences, puis proportions)
+cv0 <- table(1*(glm1p>0), TRAIN.df$STATUT)
+cv0
+prop.table(cv0)
+sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv0)))*100)
+```
+
+Nous pouvons constater que 70,1% des participants sont bien classés en utilisant l’échantillon d’entraînement et la validation croisée à 10-plis pour la régression linéaire classique.
+
+Passons maintenant aux modèles avec régularisation.
+
+La régularisation ou estimateurs par rétrécissement consiste à pénaliser la fonction objective (moindre carré) servant à estimer les coefficients. Essentiellement, il s’agit d’estimer les coefficients en donnant une pénalité de façon à réduire la dimension de la régression. Une régression OLS aura p paramètres à estimer. Une régression avec régularisation aura un nombre de degré de liberté inférieur à p permettant d’avoir un modèle linéairement plus parsimonieux. Pour estimer les coefficients d’un modèle régularisé, on utilise la fonction objective suivante:
+
+$$
+RSS_{shrinkage} = (Y − BX) + λf(B)
+$$
+
+Nous utilisons trois méthodes correspondant à trois pénalités :
+
+1.La méthode de régularisation de Ridge utilise une pénalité quadratique.
+$$
+RSS_{shrinkage} =(Y −BX)+λ \sum_{i=1}^p \ β_i^2
+$$
+
+2.La méthode du Lasso utilise une pénalité en valeur absolue.
+Cette pénalité fait en sorte que si un coefficient est à 0 pour un λ donné il restera fixé à 0 pour tout les λ∗ > λ.
+$$
+RSS_{shrinkage} = (Y −BX)+λ \sum_{i=1}^p \ |β_i|
+$$
+
+3.La méthode de régularisation elastic net utilise un mélange de deux pénalités.
+Cette méthode introduit un nouveau paramètre (α) à estimer dans le modèle. En utilisant la paramétrisation suivante, on obtient que α = 0 correspond à une régression de Ridge et α = 1 correspond à une régression de lasso. Un alpha entre 0 et 1 produit un mélange des deux pénalités.
+$$
+RSS_{shrinkage} = (Y −BX)+ + (1 − α) (λ \sum_{i=1}^p \ β_i^2 )  + (α) ( λ \sum_{i=1}^p \ |β_i|  )
+$$
+Commençons par essayer la régression logistique avec la régularisation ridge.
+
+```{r}
+##Régression logistique avec régularisation ridge
+#Sélection du lambda par validation croisée à 10 plis
+var.model <- c("MALE", "AGE", "PAR_IMM", "MINORITY", "SCOLMAX", "TRAVAILM", "TRAVAILP", "PAR_SEP", "ADAPT",
+                "SRDQ", "EVDISTSEV", "EVDISTMOD","SEVER03DICO",
+                "SEVER36DICO", "SEVER69DICO", "SEVER912DICO",
+                "MODER203DICO", "MODER236DICO", "MODER269DICO",
+                "MODER2912DICO", "LOW203DICO", "LOW236DICO",
+                "LOW269DICO", "LOW2912DICO", "CHRONSEVACT")
+
+cv.glmn1 <- cv.glmnet(x= TRAIN.df[,var.model] %>% as.matrix,
+                      y = TRAIN.df[,"STATUT"], alpha = 0, nfolds = 10, 
+                      foldid = PARTITION, intercept= TRUE, 
+                      family = "binomial", standardize = TRUE)
+
+#Visualisation des résultats de la validation croisée avec régularisation ridge (valeur de lambda optimale indiquée par les lignes verticales pointillées)
+plot(cv.glmn1)
+```
+
+```{r}
+##Régression logistique avec régularisation ridge 
+glmn1.0 <- glmnet(x = TRAIN.df[, var.model] %>% as.matrix,
+                  y = TRAIN.df[,"STATUT"], alpha = 0, family = "binomial")
+
+#Visualisation: évolution des coefficients selon valeur de lambda avec régularisation ridge + ligne rouge indiquant le lambda optimal
+plot(glmn1.0, xvar = "lambda", label = FALSE, xlab = ~ log(lambda))
+abline( v = log(cv.glmn1$lambda.min), col = "red", lty = 2)
+```
+
+La validation croisé a été appliquée pour trouver le paramètre λ. On fait une prédiction basée sur ce modèle mais la généralisation de la prédiction selon ce modèle sera confirmé à l’aide de l’échantillon de test.
+
+```{r}
+#Prédiction à l'aide de la régression logistique avec régularisation ridge
+glmn1p <- predict(cv.glmn1, newx = TRAIN.df[,var.model] %>%
+                    as.matrix, s = "lambda.min") 
+```
+
+```{r}
+#Table de classification montrant la performance prédictive du modèle
+cv2 <- table(1*(glmn1p>0), TRAIN.df$STATUT)
+cv2
+prop.table(cv2)
+sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv2)))*100)
+```
+
+On passe maintenant à la régularisation lasso.
+
+```{r}
+##Régression logistique avec régularisation ridge
+#Sélection du lambda par validation croisée à 10 plis
+cv.glmn2 <- cv.glmnet(x = TRAIN.df[,var.model] %>% as.matrix,
+                    y = TRAIN.df[,"STATUT"], alpha = 1, nfolds = 10,
+                    foldid = PARTITION, family = "binomial")
+
+glmn2 <- glmnet(x = TRAIN.df[,var.model] %>%
+                as.matrix, y = TRAIN.df[,"STATUT"], alpha = 1, family = "binomial",
+                lambda = cv.glmn2$lambda.min)
+
+#Visualisation des résultats de la validation croisée avec régularisation lasso (valeur de lambda optimale indiquée par les lignes verticales pointillées)
+plot(cv.glmn2)
+```
+
+```{r}
+##Régression logistique avec régularisation ridge 
+glmn2.0 <- glmnet(x = TRAIN.df[,var.model] %>% as.matrix,
+                  y = TRAIN.df[,"STATUT"], alpha = 1, family = "binomial")
+
+#Visualisation: évolution des coefficients selon valeur de lambda avec régularisation lasso + ligne rouge indiquant le lambda optimal
+plot(glmn2.0, xvar = "lambda", label = FALSE, xlab = ~log(lambda))
+abline(v = log(cv.glmn2$lambda.min), lty = 2, col = "red")
+```
+
+La validation croisé a été appliquée pour trouver le paramètre λ optimal. On fait une prédiction basée sur ce modèle et on compare au vrai statut de décrochage dans le training.
+
+```{r}
+#Prédiction à l'aide de la régression logistique avec régularisation ridge
+glmn2p <- predict(cv.glmn2, newx = TRAIN.df[,var.model] %>%
+                  as.matrix, s = "lambda.min")
+```
+
+```{r}
+#Table de classification montrant la performance prédictive du modèle
+cv3 <- table(1*(glmn2p>0), TRAIN.df$STATUT)
+cv3
+prop.table(cv3)
+sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv3)))*100)
+```
+
+On complète fianlement avec la régularisation elastic-net, qui combine les deux méthodes précédentes. Pour cette dernière section, on veut calculer un compromis entre le modèle lasso et le modèle ridge. Il faut donc estimer un paramètre supplémentaire (α ∈ (0, 1)).
+
+```{r}
+#Ajustement de la matrice
+layout(matrix(1:10,3,3, byrow = TRUE))
+```
+
+
+```{r}
+#Validation croisée à 10-plis pour obtention de la valeur optimale de lambda selon la valeur d'alpha (au dixième près)
+cv.glmn3 <- list()
+
+for(al in seq(0.1,0.9,0.1)){
+    cv.glmn3[[sprintf("%.1f",al)]] <-
+    cv.glmnet(x = TRAIN.df[,var.model] %>% as.matrix,
+    y = TRAIN.df[,"STATUT"], nfolds = 10, foldid = PARTITION,
+    alpha = al, family = "binomial")
+plot(cv.glmn3[[sprintf("%.1f",al)]],
+main = latex2exp::TeX(sprintf("$\\alpha = %.1f$",al)), ylim = c(1.18, 1.42))
+}
+```
+
+```{r}
+#Résumé: lambdas optimal pour chaque valeur d'alpha
+layout (1)
+lapply(cv.glmn3, function(x) c(x$cvm[x$lambda == x$lambda.min],
++ x$cvsd[x$lambda == x$lambda.min]))
+```
+
+```{r}
+#Régression logistique avec régularisation elastic-net (lambda et alpha choisi par vaidation croisée précédemment) 
+glmn3 <- glmnet(x = TRAIN.df[,var.model] %>% as.matrix,
+          y = TRAIN.df[,"STATUT"], alpha = 0.1, family = "binomial",
+          lambda = cv.glmn3[[9]]$lambda.min)
+```
+
+```{r}
+#Prédiction à l'aide de la régression logistique avec régularisation elastic-net
+glmn3p <- predict(cv.glmn3[[9]], newx = TRAIN.df[,var.model] %>% as.matrix)
+```
+
+```{r}
+#Table de classification montrant la performance prédictive du modèle
+cv4 <- table(1*(glmn3p>0), TRAIN.df$STATUT)
+cv4
+prop.table(cv4)
+sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv4)))*100)
+```
+
+Validation des modèles avec l'échantillon test
+On prend maintenant l’échantillon de test et on valide nos prédictions basées sur le modèle construit avec l’échantillon d’entraînement.
+
+```{r}
+#Prédiction avec les données test à partir de chaque modèle créé ci-haut
+glm1tp <- predict(glm1, newx = TEST.df[,var.model] %>% as.matrix, s = "lambda.min")
+glmn1tp <- predict(cv.glmn1, newx = TEST.df[,var.model] %>% as.matrix, s = "lambda.min")
+glmn2tp <- predict(cv.glmn2, newx = TEST.df[,var.model] %>% as.matrix, s = "lambda.min")
+glmn3tp <- predict(cv.glmn3[[9]], newx = TEST.df[,var.model] %>%as.matrix, s = "lambda.min")
+```
+
+```{r}
+#Table de classification résumant la performance du modèle additif sur les données test
+cvt1 <- table(1*(glm1tp>0), TEST.df$STATUT)
+cvt1
+prop.table(cvt1)
+sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt1)))*100)
+```
+
+```{r}
+#Table de classification résumant la performance du modèle avec régularistaion ridge sur les données test
+cvt2 <- table(1*(glm1tp>0), TEST.df$STATUT)
+cvt2
+prop.table(cvt2)
+sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt2)))*100)
+```
+
+```{r}
+#Table de classification résumant la performance du modèle avec régularistaion lasso sur les données test
+cvt3 <- table(1*(glmn2tp>0), TEST.df$STATUT)
+cvt3
+prop.table(cvt3)
+sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt3)))*100)
+```
+
+```{r}
+#Table de classification résumant la performance du modèle avec régularistaion elastic-net sur les données test
+cvt4 <- table(1*(glmn3tp>0), TEST.df$STATUT)
+cvt4
+prop.table(cvt4)
+sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt4)))*100)
+```
+
+
+```{r}
+#sd % accord(bootstrap)
+set.seed(1234)
+good.class <- function(model, i ){
+            if("glm" %in% class(model)){
+            glm1tp <- predict(glm1, newdata = TEST.df[i,])
+            cvt1 <- table(1*(glm1tp>0), TEST.df$STATUT[i])
+            sum(diag(prop.table(cvt1)))*100
+}
+  else {glmn3tp <- predict(model,
+                           newx = TEST.df[i,var.model] %>% as.matrix, s = "lambda.min")
+  (cvt4 <- table(1*(glmn3tp>0), TEST.df$STATUT)) %>%
+sum(diag(prop.table(cvt4)))*100
+  }
+}
+
+sd(replicate(1000,good.class(glm1, sample(1:300, 300, TRUE))))
+```
+
+```{r}
+#Tableau de comparaison des coefficients et prédictions de chaque modèle
+length(drop(coef(cv.glmn3[[6]],
+       s = "lambda.min",allCoef = TRUE)))
+
+coef(cv.glmn3[[6]], s = "lambda.min",allCoef = TRUE)
+
+cf <- data.frame(VAR = c("Int.", var.model),
+                 OLS = drop(coef(glm1, s = "lambda.min",allCoef = TRUE)),
+                 RIDGE = drop(coef(cv.glmn1,s = "lambda.min",allCoef = TRUE)),
+                 LASSO = drop(coef(cv.glmn2,s = "lambda.min",allCoef = TRUE)),
+                 `ELASTIC NET` = drop(coef(cv.glmn3[[6]],
+                                           s = "lambda.min",allCoef = TRUE)))
+kable(cf, digits = 2,row.names = FALSE)
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
