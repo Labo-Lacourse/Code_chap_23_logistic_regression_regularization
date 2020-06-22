@@ -12,7 +12,7 @@ Ce dépôt contient le code utilisé pour obtenir les résultats présentés dan
     
     > Environnement R dans Jupyter Notebook 
     
-    > Script original dans R Studio
+    > Script original dans R Studio en R Markdown
     
     
 Les trois formats contiennent le même code, sauf à quelques exceptions près lorsque le code a dû être modifié pour s'adapter au format en question. Les résultats demeurent les mêmes peu importe le format de code utilisé.
