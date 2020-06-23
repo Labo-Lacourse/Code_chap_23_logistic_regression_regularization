@@ -80,11 +80,11 @@ require(latex2exp)
 
 ```{r}
 #Télécharger le fichier de données à partir de github
-SD.csv <- "https://github.com/clemcou-socio/Code-chapitre-23/SD.csv"
+SD.csv <- "https://github.com/ericlacourse/Code-chapitre-23.git"
 
 #Lire le fichier de données téléchargé depuis github (vérification du téléchargement des données et des packages)
 library(readr)
-SD.df <- read.csv("SD.csv")
+SD.df <- read.csv("Code-chapitre-23/SD.csv")
 ls(SD.df)
 ```
 
@@ -106,8 +106,8 @@ TEST.df <- SD.df[-ECH.TRAIN,]
 
 ```{r}
 #Standardisation des variables
-TRAIN.df[,-(1:3)]  <- scale(TRAIN.df[,-(1:3)])
-TEST.df[,-(1:3)]  <- scale(TEST.df[,-(1:3)])
+TRAIN.df[,-(2:4)]  <- scale(TRAIN.df[,-(2:4)])
+TEST.df[,-(2:4)]  <- scale(TEST.df[,-(2:4)])
 
 TRAIN.df <- as.data.frame(TRAIN.df)
 TEST.df <- as.data.frame(TEST.df)
@@ -173,7 +173,7 @@ glm1p <- predict(glm1, newx = TRAIN.df[,var.model] %>%
 #Table de classification montrant la performance prédictive du modèle (fréquences, puis proportions)
 cv0 <- table(1*(glm1p>0), TRAIN.df$STATUT)
 cv0
-prop.table(cv0)
+prop.table(cv0)*100
 sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv0)))*100)
 ```
 
@@ -248,7 +248,7 @@ glmn1p <- predict(cv.glmn1, newx = TRAIN.df[,var.model] %>%
 #Table de classification montrant la performance prédictive du modèle
 cv2 <- table(1*(glmn1p>0), TRAIN.df$STATUT)
 cv2
-prop.table(cv2)
+prop.table(cv2)*100
 sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv2)))*100)
 ```
 
@@ -291,7 +291,7 @@ glmn2p <- predict(cv.glmn2, newx = TRAIN.df[,var.model] %>%
 #Table de classification montrant la performance prédictive du modèle
 cv3 <- table(1*(glmn2p>0), TRAIN.df$STATUT)
 cv3
-prop.table(cv3)
+prop.table(cv3)*100
 sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv3)))*100)
 ```
 
@@ -340,7 +340,7 @@ glmn3p <- predict(cv.glmn3[[9]], newx = TRAIN.df[,var.model] %>% as.matrix)
 #Table de classification montrant la performance prédictive du modèle
 cv4 <- table(1*(glmn3p>0), TRAIN.df$STATUT)
 cv4
-prop.table(cv4)
+prop.table(cv4)*100
 sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv4)))*100)
 ```
 
@@ -359,7 +359,7 @@ glmn3tp <- predict(cv.glmn3[[9]], newx = TEST.df[,var.model] %>%as.matrix, s = "
 #Table de classification résumant la performance du modèle additif sur les données test
 cvt1 <- table(1*(glm1tp>0), TEST.df$STATUT)
 cvt1
-prop.table(cvt1)
+prop.table(cvt1)*100
 sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt1)))*100)
 ```
 
@@ -367,7 +367,7 @@ sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt1)))*100)
 #Table de classification résumant la performance du modèle avec régularistaion ridge sur les données test
 cvt2 <- table(1*(glm1tp>0), TEST.df$STATUT)
 cvt2
-prop.table(cvt2)
+prop.table(cvt2)*100
 sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt2)))*100)
 ```
 
@@ -375,7 +375,7 @@ sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt2)))*100)
 #Table de classification résumant la performance du modèle avec régularistaion lasso sur les données test
 cvt3 <- table(1*(glmn2tp>0), TEST.df$STATUT)
 cvt3
-prop.table(cvt3)
+prop.table(cvt3)*100
 sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt3)))*100)
 ```
 
@@ -383,7 +383,7 @@ sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt3)))*100)
 #Table de classification résumant la performance du modèle avec régularistaion elastic-net sur les données test
 cvt4 <- table(1*(glmn3tp>0), TEST.df$STATUT)
 cvt4
-prop.table(cvt4)
+prop.table(cvt4)*100
 sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt4)))*100)
 ```
 
@@ -422,74 +422,4 @@ cf <- data.frame(VAR = c("Int.", var.model),
                                            s = "lambda.min",allCoef = TRUE)))
 kable(cf, digits = 2,row.names = FALSE)
 ```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
