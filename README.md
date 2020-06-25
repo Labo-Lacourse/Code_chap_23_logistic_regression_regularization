@@ -16,3 +16,5 @@ Ce dépôt contient le code utilisé pour obtenir les résultats présentés dan
     
     
 Les trois formats contiennent le même code, sauf à quelques exceptions près lorsque le code a dû être modifié pour s'adapter au format en question. Les résultats demeurent les mêmes peu importe le format de code utilisé.
+
+The same code is also available with english description in the sub-file "English code", in the same three formats.
