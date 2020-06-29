@@ -28,8 +28,11 @@ Les trois formats contiennent le même code, sauf à quelques exceptions près l
 Voici quelques liens utiles pour approfondir votre compréhenison des concepts présentés dans le chapitre et utilisé dans l'analyse.
 
 https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw
+
 https://fr.wikipedia.org/wiki/Lasso_(statistiques)
+
 https://fr.wikipedia.org/wiki/R%C3%A9gularisation_de_Tikhonov
+
 https://en.wikipedia.org/wiki/Elastic_net_regularization (en anglais seulement)
 
 
@@ -61,8 +64,11 @@ All three formats contain the same code, except for some instances when the code
 Here are a few links to different types of ressources to help deepen your understanding of the concepts presented in the chapter and used in the analysis.
 
 https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw
+
 https://en.wikipedia.org/wiki/Lasso_(statistics)
+
 https://en.wikipedia.org/wiki/Tikhonov_regularization
+
 https://en.wikipedia.org/wiki/Elastic_net_regularization
 
 
