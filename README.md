@@ -2,7 +2,8 @@ English will follow
 
 # Algorithmes d’apprentissage et modèles statistiques
 ## Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire
-### Dans M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2e édition. Québec, QC : PUQ.
+### Dans M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2e édition. Québec, QC : PUQ. 
+Contact: eric.lacourse@umontreal.ca
 ### Auteurs: Éric Lacourse, Charles-Édouard Giguère et Véronique Dupéré
 #### Analyste: Charles-Édouard Giguère
 #### Transcription du code: Clémentine Courdi
@@ -40,6 +41,7 @@ https://en.wikipedia.org/wiki/Elastic_net_regularization (en anglais seulement)
 # Machine learning algorithms and statistical models
 ## An example of regularization and cross validation in logistic regression to predict high school dropout in Quebec
 ### In M. Corbière & N. Larivière (Eds.), Qualitative, quantitative and mixed methods in human, social and health science research, 2nd edition. Québec, QC : PUQ.
+Contact: eric.lacourse@umontreal.ca
 ### Authors: Éric Lacourse, Charles-Édouard Giguère et Véronique Dupéré
 #### Analyst: Charles-Édouard Giguère
 #### Code transcription: Clémentine Courdi
