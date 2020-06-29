@@ -47,7 +47,7 @@ Contact: eric.lacourse@umontreal.ca
 #### Code transcription: Clémentine Courdi
 
 Cite as:
-Lacourse, E., Giguére, C.E., & Dupéré, V. (under press). Algorithmes d’apprentissage et modèles statistiques: Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire. In M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2nd edition. Québec, QC : PUQ. 
+Lacourse, E., Giguére, C.E., & Dupéré, V. (in press). Algorithmes d’apprentissage et modèles statistiques: Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire. In M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2nd edition. Québec, QC : PUQ. 
 
 This chapter presents the advantages of using regularization methods in linear and logistic regression analysis. To illustrate regularization and cross-validation technics, we give an example of regularized logistic regression looking to predict dropout status for Quebec high-school students. With 25 predictive variables and a simulated sample of 1000 observations, the results of the classic logistic regression are compared  with those of ridge, lasso and elastic-net regression.
 
