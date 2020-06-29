@@ -2,14 +2,14 @@ English will follow
 
 # Algorithmes d’apprentissage et modèles statistiques
 ## Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire
-### Dans M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2e édition. Québec, QC : PUQ. 
+### Dans M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2e édition. Québec, QC : PUQ. (sous presse)
 Contact: eric.lacourse@umontreal.ca
 ### Auteurs: Éric Lacourse, Charles-Édouard Giguère et Véronique Dupéré
 #### Analyste: Charles-Édouard Giguère
 #### Transcription du code: Clémentine Courdi
 
 Pour citation:
-Lacourse, E., Giguére, C.E., & Dupéré, V. (sous presse). Algorithmes d’apprentissage et modèles statistiques: Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire. Dans M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2e édition. Québec, QC : PUQ. 
+Lacourse, E., Giguére, C.E., & Dupéré, V. (2020). Algorithmes d’apprentissage et modèles statistiques: Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire. Dans M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2e édition. Québec, QC : PUQ. 
 
 Le chapitre présente les avantages de l'utilisation de la régularisation dans l'analyse de régression linéaire et logistique. Afin d'illustrer les techniques de régularisation, nous donnons un exemple de régression logistique régularisée avec validation croisée cherchant à prédire le décrochage scolaire chez des élèves du secondaire au Québec. Avec 25 variables prédictives et un échantillon simulé de 1000 cas, les résultats de la régression logistique ordinaire sont comparés avec ceux de la régression avec régularisation ridge, lasso et elstic-net. 
 
@@ -28,7 +28,7 @@ Les trois formats contiennent le même code, sauf à quelques exceptions près l
 
 Voici quelques liens utiles pour approfondir votre compréhenison des concepts présentés dans le chapitre et utilisé dans l'analyse.
 
-https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw
+https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw (en anglais)
 
 https://fr.wikipedia.org/wiki/Lasso_(statistiques)
 
@@ -40,14 +40,14 @@ https://en.wikipedia.org/wiki/Elastic_net_regularization (en anglais seulement)
 
 # Machine learning algorithms and statistical models
 ## An example of regularization and cross validation in logistic regression to predict high school dropout in Quebec
-### In M. Corbière & N. Larivière (Eds.), Qualitative, quantitative and mixed methods in human, social and health science research, 2nd edition. Québec, QC : PUQ.
+### In M. Corbière & N. Larivière (Eds.), Qualitative, quantitative and mixed methods in human, social and health science research, 2nd edition. Québec, QC : PUQ. (in press)
 Contact: eric.lacourse@umontreal.ca
 ### Authors: Éric Lacourse, Charles-Édouard Giguère et Véronique Dupéré
 #### Analyst: Charles-Édouard Giguère
 #### Code transcription: Clémentine Courdi
 
 Cite as:
-Lacourse, E., Giguére, C.E., & Dupéré, V. (in press). Algorithmes d’apprentissage et modèles statistiques: Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire. In M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2nd edition. Québec, QC : PUQ. 
+Lacourse, E., Giguére, C.E., & Dupéré, V. (2020). Algorithmes d’apprentissage et modèles statistiques: Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire. In M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2nd edition. Québec, QC : PUQ. 
 
 This chapter presents the advantages of using regularization methods in linear and logistic regression analysis. To illustrate regularization and cross-validation technics, we give an example of regularized logistic regression looking to predict dropout status for Quebec high-school students. With 25 predictive variables and a simulated sample of 1000 observations, the results of the classic logistic regression are compared  with those of ridge, lasso and elastic-net regression.
 
