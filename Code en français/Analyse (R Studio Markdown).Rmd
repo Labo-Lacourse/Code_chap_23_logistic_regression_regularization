@@ -1,13 +1,24 @@
-#Code des analyses présentées dans la partie 2 du chapitre 23
-##Écrit par Éric Lacourse, Véronique Dupéré et Charles-Édouard Giguère
-####Analyste: Charles-Édouard Giguère
-####Transcription du code: Clémentine Courdi
+---
+output:
+  pdf_document:
+    keep_tex: true
+    fig_caption: true
+    latex_engine: xelatex
+title: "Algorithmes d’apprentissage et modèles statistiques: Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire"
+author: Charles-Édouard Giguère Éric Lacourse Véronique Dupéré 
+date: "`r  format(Sys.time(), '%Y-%m-%d') `"
+toc: true
+---
 
-2.1. Description de l’échantillon, du devis et des variables
-2.1.1. Échantillon
-Les données ont été recueillies initialement auprès de n = 6773 d’adolescents provenant de 12 écoles où le taux de décrochage est particulièrement élevé, autour de 36%, afin de mesurer un ensemble de facteurs de risque du décrochage scolaire. Au total, 10 des 12 écoles étaient situées dans des quartiers défavorisés. Un sous-échantillon a par la suite été invité à une entrevue afin d’établir les stresseurs auxquels les adolescents étaient exposés. L’objectif était d’interviewer 45 adolescents par école (pour un total de n = 545), suivant un devis avec cas témoins appariés. D’abord, 15 élèves qui venaient de décrocher de l’école ont été interviewés. Ensuite, 15 élèves appariés ayant un profil initial de risques similaires mais qui persévéraient ont également été interviewés. Finalement, 15 autres élèves « normatifs », également persévérants, qui avaient un niveau moyen de risque ont été interviewés.
+Abstract: Code des analyses présentées dans la partie 2 du chapitre 23: régression logistique régularisée
 
-2.1.2. Variables
+Keywords: Apprentissage machine, Régularisation, Validation croisée
+
+## 2.1. Description de l’échantillon, du devis et des variables
+### 2.1.1. Échantillon
+Les données ont été recueillies initialement auprès de n = 6773 d’adolescents provenant de 12 écoles où le taux de décrochage est particulièrement élevé, autour de 36%, afin de mesurer un ensemble de facteurs de risque du décrochage scolaire. Au total, 10 des 12 écoles étaient situées dans des quartiers défavorisés. Un sous-échantillon a par la suite été invité à une entrevue afin d’établir les stresseurs auxquels les adolescents étaient exposés. L’objectif était d’interviewer 45 adolescents par école (pour un total de n = 545), suivant un devis avec cas témoins appariés. D’abord, 15 élèves qui venaient de décrocher de l’école ont été interviewés. Ensuite, 15 élèves appariés ayant un profil initial de risques similaire, mais qui persévéraient ont également été interviewés. Finalement, 15 autres élèves « normatifs », également persévérants, qui avaient un niveau moyen de risque ont été interviewés.
+
+### 2.1.2. Variables
 La variable dépendante est une variable dichotomique (codée 0 = non/1 = oui) représentant le fait qu’un élève a décroché de l’école ou non. Un élève est considéré comme décrocheur s’il remplit au moins une des trois conditions suivantes : 1) avoir avisé officiellement de la cessation de ses études avant d’obtenir son diplôme d’études secondaires ou DES, 2) avoir été transféré au système d’éducation aux adultes, 3) être absent pendant plus d’un mois de l’école sans avoir avisé la direction des motivations sous-jacentes. Pour plus de détails sur les variables et le devis, voir l’article original de Dupéré et al. (2018)Une particularité de la structure des données est que la grande proportion des variables sont ordinales et recodées en variables factices (dummy) dichotomiques. En général, les effets de la régulation sont plus marqués : 1) avec des variables intervalles/ratio puisqu’elles ont une plus grande variance et 2) en présence de multicollinéarité. Une autre caractéristique des données est que nous ne sommes pas en contexte de haute dimensionnalité puisque nous avons 25 variables pour 1000 participants, donc p << n.  En dernier lieu, l’étude originale est de nature confirmatoire (hypothético-déductive) et non exploratoire (inductive), ce qui favorisera les algorithmes les moins flexibles, comme la régression logistique « classique ».  
 
 Description des variables indépendantes introduites dans le modèle de régression logistique régularisée provenant de l’étude de Dupéré et al. (2018)
@@ -40,23 +51,23 @@ Nom des variables -	Types de variables - Nom des variables dans le fichier de do
 24.	Stresseurs distaux sévères	-	Intervalle/ratio	-	EVDISTSEV
 25.	Stresseurs distaux modérés	-	Intervalle/ratio	-	EVDISTMOD
 
-2.2. Objectifs de l’analyse 
+## 2.2. Objectifs de l’analyse 
 
 L’objectif principal de cette analyse est de sélectionner un modèle de régression logistique, de manière exploratoire/inductive, en utilisant des techniques qui sont particulières à l’apprentissage automatique afin de potentiellement prédire le décrochage scolaire avec la plus grande justesse prédictive possible à partir des 25 variables indépendantes. Nous utilisons des données simulées à partir de l’échantillon initial.En résumé, la tâche de classification consiste à trouver à la fois le nombre optimal de prédicteurs du décrochagescolaire et l’algorithme de régularisation qui permettra le meilleur ajustement du modèle aux données, compte tenu de la spécificité des variables introduites dans le modèle.
 
-2.3. et 2.4 Régression logistique régularisée : procédures et modèles + interprétations et taleaux de résultats
+## 2.3. et 2.4 Régression logistique régularisée : procédures et modèles + interprétations et taleaux de résultats
 La suite du document montre le code utilisé (originalement dans le logiciel RStudio) pour la sélection du modèle conformément aux procédures décrites dans la partie 2.3 et aux résultats montrés dans la partie 2.4 du chapitre
 
 ```{r}
-#Téléchargement des packages nécessaire à l'analyse
+#Téléchargement des packages nécessaire à l'analyse (si vous installez ces packages pour la première fois, retirez # au début de chaque ligne "install.packages")
 
-install.packages("CUFF") #Package CUFF (Charles's Utility Function using Formula) pour affichage des variables
-install.packages ("dplyr") #Package dplyr pour manipulation flexible des données
-install.packages("ggplot2") #Package ggplot2 pour création de graphiques 
-install.packages("haven") #Package haven pour importer des données d'autres formats dans R
-install.packages("knitr") #Package knitr pour production de tableau
-install.packages("xtable") #Package xtable pour production de tableau
-install.packages("pairwise") #Package xtable pour production de tableau
+#install.packages("CUFF") #Package CUFF (Charles's Utility Function using Formula) pour affichage des variables
+#install.packages ("dplyr") #Package dplyr pour manipulation flexible des données
+#install.packages("ggplot2") #Package ggplot2 pour création de graphiques 
+#install.packages("haven") #Package haven pour importer des données d'autres formats dans R
+#install.packages("knitr") #Package knitr pour production de tableau
+#install.packages("xtable") #Package xtable pour production de tableau
+#install.packages("pairwise") #Package xtable pour production de tableau
 
 
 require(dplyr, quietly = TRUE, warn.conflicts = FALSE) 
@@ -70,8 +81,8 @@ require(pairwise, quietly = TRUE, warn.conflicts = FALSE)
 opts_chunk$set(echo = TRUE, prompt = TRUE, comment = "", cache = TRUE)
 options(xtable.comment = FALSE)
 
-install.packages("glmnet", quietly = TRUE, warn.conflicts = FALSE, dependencies = TRUE)
-install.packages("latex2exp", quietly = TRUE, warn.conflicts = FALSE, dependencies = TRUE)
+#install.packages("glmnet", quietly = TRUE, warn.conflicts = FALSE, dependencies = TRUE)
+#install.packages("latex2exp", quietly = TRUE, warn.conflicts = FALSE, dependencies = TRUE)
 
 require(glmnet)
 require(latex2exp)
@@ -84,7 +95,7 @@ SD.csv <- "https://github.com/ericlacourse/Code-chapitre-23.git"
 
 #Lire le fichier de données téléchargé depuis github (vérification du téléchargement des données et des packages)
 library(readr)
-SD.df <- read.csv("Code-chapitre-23/SD.csv")
+SD.df <- read.csv("SD.csv")
 ls(SD.df)
 ```
 
@@ -95,8 +106,7 @@ Ainsi, l’échantillon est séparé en deux sous-échantillons:
 2. Fichier de test (TEST.df ; N = 300)
 
 ```{r}
-#Diviser l'ensemble de données pour créer une sous-ensemble de données d'entrainement et un sous-ensemble de données de test 
-#(avec germe aléatoire pour assurer la reproductibilité des résultats)
+#Diviser l'ensemble de données pour créer un sous-ensemble de données d'entrainement et un sous-ensemble de données de test (avec germe aléatoire pour assurer la reproductibilité des résultats)
 set.seed(1234)
 ECH.TRAIN <- sample(1:1000, 700)
 TRAIN.df <- SD.df[ECH.TRAIN,]
@@ -179,31 +189,33 @@ sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv0)))*100)
 
 Nous pouvons constater que 70,1% des participants sont bien classés en utilisant l’échantillon d’entraînement et la validation croisée à 10-plis pour la régression linéaire classique.
 
+## Régression régularisée
+
 Passons maintenant aux modèles avec régularisation.
 
-La régularisation ou estimateurs par rétrécissement consiste à pénaliser la fonction objective (moindre carré) servant à estimer les coefficients. Essentiellement, il s’agit d’estimer les coefficients en donnant une pénalité de façon à réduire la dimension de la régression. Une régression OLS aura p paramètres à estimer. Une régression avec régularisation aura un nombre de degré de liberté inférieur à p permettant d’avoir un modèle linéairement plus parsimonieux. Pour estimer les coefficients d’un modèle régularisé, on utilise la fonction objective suivante:
+La régularisation ou estimateurs par rétrécissement consiste à pénaliser la fonction objective (moindre carré) servant à estimer les coefficients. Essentiellement, il s’agit d’estimer les coefficients en donnant une pénalité de façon à réduire la dimension de la régression. Une régression OLS aura p paramètres à estimer. Une régression avec régularisation aura un nombre de degrés de liberté inférieur à p permettant d’avoir un modèle linéairement plus parcimonieux. Pour estimer les coefficients d’un modèle régularisé, on utilise la fonction objective suivante:
 
 $$
-RSS_{shrinkage} = (Y − BX) + λf(B)
+RSS_{shrinkage} = (Y - BX) + \lambda f(B)
 $$
 
 Nous utilisons trois méthodes correspondant à trois pénalités :
 
 1.La méthode de régularisation de Ridge utilise une pénalité quadratique.
 $$
-RSS_{shrinkage} =(Y −BX)+λ \sum_{i=1}^p \ β_i^2
+RSS_{shrinkage} =(Y - BX)+ \lambda \sum_{i=1}^p \ \beta_i^2
 $$
 
 2.La méthode du Lasso utilise une pénalité en valeur absolue.
-Cette pénalité fait en sorte que si un coefficient est à 0 pour un λ donné il restera fixé à 0 pour tout les λ∗ > λ.
+Cette pénalité fait en sorte que si un coefficient est à 0 pour un $\lambda$ donné il restera fixé à 0 pour tous les $\lambda$* > $\lambda$.
 $$
-RSS_{shrinkage} = (Y −BX)+λ \sum_{i=1}^p \ |β_i|
+RSS_{shrinkage} = (Y - BX)+\lambda \sum_{i=1}^p \ |\beta_i|
 $$
 
 3.La méthode de régularisation elastic net utilise un mélange de deux pénalités.
-Cette méthode introduit un nouveau paramètre (α) à estimer dans le modèle. En utilisant la paramétrisation suivante, on obtient que α = 0 correspond à une régression de Ridge et α = 1 correspond à une régression de lasso. Un alpha entre 0 et 1 produit un mélange des deux pénalités.
+Cette méthode introduit un nouveau paramètre ($\alpha$) à estimer dans le modèle. En utilisant la paramétrisation suivante, on obtient que $\alpha$ = 0 correspond à une régression de Ridge et $\alpha$ = 1 correspond à une régression de lasso. Un alpha entre 0 et 1 produit un mélange des deux pénalités.
 $$
-RSS_{shrinkage} = (Y −BX)+ + (1 − α) (λ \sum_{i=1}^p \ β_i^2 )  + (α) ( λ \sum_{i=1}^p \ |β_i|  )
+RSS_{shrinkage} = (Y - BX)+ + (1 - \alpha) ( \sum_{i=1}^p \ \beta_i^2 )  + (\alpha) ( \lambda \sum_{i=1}^p \ |\beta_i|  )
 $$
 Commençons par essayer la régression logistique avec la régularisation ridge.
 
@@ -236,7 +248,7 @@ plot(glmn1.0, xvar = "lambda", label = FALSE, xlab = ~ log(lambda))
 abline( v = log(cv.glmn1$lambda.min), col = "red", lty = 2)
 ```
 
-La validation croisé a été appliquée pour trouver le paramètre λ. On fait une prédiction basée sur ce modèle mais la généralisation de la prédiction selon ce modèle sera confirmé à l’aide de l’échantillon de test.
+La validation croisé a été appliquée pour trouver le paramètre lambda. On fait une prédiction basée sur ce modèle, mais la généralisation de la prédiction selon ce modèle sera confirmée à l’aide de l’échantillon de test.
 
 ```{r}
 #Prédiction à l'aide de la régression logistique avec régularisation ridge
@@ -279,7 +291,7 @@ plot(glmn2.0, xvar = "lambda", label = FALSE, xlab = ~log(lambda))
 abline(v = log(cv.glmn2$lambda.min), lty = 2, col = "red")
 ```
 
-La validation croisé a été appliquée pour trouver le paramètre λ optimal. On fait une prédiction basée sur ce modèle et on compare au vrai statut de décrochage dans le training.
+La validation croisé a été appliquée pour trouver le paramètre $\lambda$ optimal. On fait une prédiction basée sur ce modèle et on compare au vrai statut de décrochage dans les données d'entrainement.
 
 ```{r}
 #Prédiction à l'aide de la régression logistique avec régularisation ridge
@@ -295,7 +307,7 @@ prop.table(cv3)*100
 sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cv3)))*100)
 ```
 
-On complète fianlement avec la régularisation elastic-net, qui combine les deux méthodes précédentes. Pour cette dernière section, on veut calculer un compromis entre le modèle lasso et le modèle ridge. Il faut donc estimer un paramètre supplémentaire (α ∈ (0, 1)).
+On complète finalement avec la régularisation elastic-net, qui combine les deux méthodes précédentes. Pour cette dernière section, on veut calculer un compromis entre le modèle lasso et le modèle ridge. Il faut donc estimer un paramètre supplémentaire ($\alpha \in$ (0, 1)).
 
 ```{r}
 #Ajustement de la matrice
@@ -318,14 +330,14 @@ main = latex2exp::TeX(sprintf("$\\alpha = %.1f$",al)), ylim = c(1.18, 1.42))
 ```
 
 ```{r}
-#Résumé: lambdas optimal pour chaque valeur d'alpha
+#Résumé: lambda optimal pour chaque valeur d'alpha
 layout (1)
 lapply(cv.glmn3, function(x) c(x$cvm[x$lambda == x$lambda.min],
 + x$cvsd[x$lambda == x$lambda.min]))
 ```
 
 ```{r}
-#Régression logistique avec régularisation elastic-net (lambda et alpha choisi par vaidation croisée précédemment) 
+#Régression logistique avec régularisation elastic-net (lambda et alpha choisis par validation croisée précédemment) 
 glmn3 <- glmnet(x = TRAIN.df[,var.model] %>% as.matrix,
           y = TRAIN.df[,"STATUT"], alpha = 0.1, family = "binomial",
           lambda = cv.glmn3[[9]]$lambda.min)
@@ -364,7 +376,7 @@ sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt1)))*100)
 ```
 
 ```{r}
-#Table de classification résumant la performance du modèle avec régularistaion ridge sur les données test
+#Table de classification résumant la performance du modèle avec régularisation ridge sur les données test
 cvt2 <- table(1*(glm1tp>0), TEST.df$STATUT)
 cvt2
 prop.table(cvt2)*100
@@ -372,7 +384,7 @@ sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt2)))*100)
 ```
 
 ```{r}
-#Table de classification résumant la performance du modèle avec régularistaion lasso sur les données test
+#Table de classification résumant la performance du modèle avec régularisation lasso sur les données test
 cvt3 <- table(1*(glmn2tp>0), TEST.df$STATUT)
 cvt3
 prop.table(cvt3)*100
@@ -380,7 +392,7 @@ sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt3)))*100)
 ```
 
 ```{r}
-#Table de classification résumant la performance du modèle avec régularistaion elastic-net sur les données test
+#Table de classification résumant la performance du modèle avec régularisation elastic-net sur les données test
 cvt4 <- table(1*(glmn3tp>0), TEST.df$STATUT)
 cvt4
 prop.table(cvt4)*100
@@ -389,7 +401,7 @@ sprintf("%.1f%% de bonne classification", sum(diag(prop.table(cvt4)))*100)
 
 
 ```{r}
-#sd % accord(bootstrap)
+#Bootstrap
 set.seed(1234)
 good.class <- function(model, i ){
             if("glm" %in% class(model)){
@@ -408,7 +420,7 @@ sd(replicate(1000,good.class(glm1, sample(1:300, 300, TRUE))))
 ```
 
 ```{r}
-#Tableau de comparaison des coefficients et prédictions de chaque modèle
+#Tableau de comparaison des coefficients de chaque modèle
 length(drop(coef(cv.glmn3[[6]],
        s = "lambda.min",allCoef = TRUE)))
 
@@ -423,3 +435,17 @@ cf <- data.frame(VAR = c("Int.", var.model),
 kable(cf, digits = 2,row.names = FALSE)
 ```
 
+Résumé de la performance des différents modèles:
+
+    Modèle additif de régression linéaire classique: 
+      Performance de 70.1% avec les données d'entrainement
+      Performance de 66.7% avec les données de test
+    Régression linéaire avec régularisation ridge: 
+      Performance de 70.6% avec les données d'entrainement
+      Performance de 66.7% avec les données de test
+    Régression linéaire avec régularisation lasso: 
+      Performance de 69.9% avec les données d'entrainement
+      Performance de 67% avec les données de test
+    Régression linéaire avec régularisation elastic-net: 
+      Performance de 67.7% avec les données d'entrainement
+      Performance de 67% avec les données de test
