@@ -36,6 +36,7 @@ https://fr.wikipedia.org/wiki/R%C3%A9gularisation_de_Tikhonov
 
 https://en.wikipedia.org/wiki/Elastic_net_regularization (en anglais seulement)
 
+https://github.com/cran/glmnet
 
 
 # Machine learning algorithms and statistical models
@@ -73,5 +74,6 @@ https://en.wikipedia.org/wiki/Tikhonov_regularization
 
 https://en.wikipedia.org/wiki/Elastic_net_regularization
 
+https://github.com/cran/glmnet
 
 
