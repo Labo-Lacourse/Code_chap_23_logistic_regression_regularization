@@ -91,7 +91,7 @@ require(latex2exp)
 
 ```{r}
 #Télécharger le fichier de données à partir de github
-SD.csv <- "https://github.com/ericlacourse/Code-chapitre-23.git"
+SD.csv <- "https://github.com/Labo-Lacourse/Code_chap_23_logistic_regression_regularization.git"
 
 #Lire le fichier de données téléchargé depuis github (vérification du téléchargement des données et des packages)
 library(readr)
