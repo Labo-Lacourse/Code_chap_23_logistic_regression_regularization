@@ -28,7 +28,7 @@ Les trois formats contiennent le même code, sauf à quelques exceptions près l
 
 Voici quelques liens utiles pour approfondir votre compréhension des concepts présentés dans le chapitre et utilisés dans l'analyse.
 
-https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw (Staquest machine learning serie, en anglais)
+https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw (Statquest machine learning serie, en anglais)
 
 https://fr.wikipedia.org/wiki/Lasso_(statistiques)
 
@@ -66,7 +66,7 @@ All three formats contain the same code, except for some instances when the code
 
 Here are a few links to different types of resources to help deepen your understanding of the concepts presented in the chapter and used in the analysis.
 
-https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw (Staquest machine learning serie)
+https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw (Statquest machine learning serie)
 
 https://en.wikipedia.org/wiki/Lasso_(statistics)
 
