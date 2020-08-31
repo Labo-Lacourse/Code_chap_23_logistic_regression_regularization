@@ -2,7 +2,7 @@ English will follow
 
 # Algorithmes d’apprentissage et modèles statistiques
 ## Un exemple de régression logistique régularisée et de validation croisée pour prédire le décrochage scolaire
-### Dans M. Corbière & N. Larivière (Eds.), **Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé**, 2e édition. Québec, QC : PUQ. (2020)
+### Dans M. Corbière & N. Larivière (Eds.), Méthodes qualitatives, quantitatives et mixtes dans la recherche en sciences humaines, sociales et de la santé, 2e édition. Québec, QC : PUQ. (2020)
 Contact: eric.lacourse@umontreal.ca
 ### Auteurs: Éric Lacourse, Charles-Édouard Giguère et Véronique Dupéré
 #### Analyste: Charles-Édouard Giguère
