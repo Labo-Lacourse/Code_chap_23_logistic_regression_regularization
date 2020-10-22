@@ -42,6 +42,8 @@ https://en.wikipedia.org/wiki/Elastic_net_regularization (en anglais seulement)
 
 https://github.com/cran/glmnet
 
+https://crlnp.github.io/index.html
+
 
 # Machine learning algorithms and statistical models
 ## An example of regularization and cross validation in logistic regression to predict high school dropout in Quebec
@@ -84,4 +86,4 @@ https://en.wikipedia.org/wiki/Elastic_net_regularization
 
 https://github.com/cran/glmnet
 
-
+https://crlnp.github.io/index.html
