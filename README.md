@@ -28,22 +28,8 @@ Ce dépôt contient le code utilisé pour obtenir les résultats présentés dan
     
 Les trois formats contiennent le même code, sauf à quelques exceptions près lorsque le code a dû être modifié pour s'adapter au format en question. Les résultats demeurent les mêmes, peu importe le format de code utilisé.
 
-#### Pour aller plus loin:
-
-Voici quelques liens utiles pour approfondir votre compréhension des concepts présentés dans le chapitre et utilisés dans l'analyse.
-
-https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw (Statquest machine learning serie, en anglais)
-
+#### Pour aller plus loin: 
 https://fr.wikipedia.org/wiki/Lasso_(statistiques)
-
-https://fr.wikipedia.org/wiki/R%C3%A9gularisation_de_Tikhonov
-
-https://en.wikipedia.org/wiki/Elastic_net_regularization (en anglais seulement)
-
-https://github.com/cran/glmnet
-
-https://crlnp.github.io/index.html
-
 
 # Machine learning algorithms and statistical models
 ## An example of regularization and cross validation in logistic regression to predict high school dropout in Quebec
@@ -73,17 +59,4 @@ This repository contains the code used to obtain the results presented in the se
 All three formats contain the same code, except for some instances when the code had to be modified to be adapted to said format. The results stay the same regardless of the code format used.
 
 ##### Readings and resources:
-
-Here are a few links to different types of resources to help deepen your understanding of the concepts presented in the chapter and used in the analysis.
-
-https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw (Statquest machine learning serie)
-
 https://en.wikipedia.org/wiki/Lasso_(statistics)
-
-https://en.wikipedia.org/wiki/Tikhonov_regularization
-
-https://en.wikipedia.org/wiki/Elastic_net_regularization
-
-https://github.com/cran/glmnet
-
-https://crlnp.github.io/index.html
